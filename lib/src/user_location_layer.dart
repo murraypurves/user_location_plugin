@@ -38,22 +38,22 @@ class _MapsPluginLayerState extends State<MapsPluginLayer> {
         location.serviceEnabled().then((onValue) async {
           if (onValue == false) {
             await location.requestService();
-            _handleLocationChanges();
             _subscribeToLocationChanges();
+            _handleLocationChanges();
           } else {
-            _handleLocationChanges();
             _subscribeToLocationChanges();
+            _handleLocationChanges();
           }
         });
       } else {
         location.serviceEnabled().then((onValue) async {
           if (onValue == false) {
             await location.requestService();
-            _handleLocationChanges();
             _subscribeToLocationChanges();
+            _handleLocationChanges();
           } else {
-            _handleLocationChanges();
             _subscribeToLocationChanges();
+            _handleLocationChanges();
           }
         });
       }
@@ -78,7 +78,7 @@ class _MapsPluginLayerState extends State<MapsPluginLayer> {
           } else {
             _currentLocation = LatLng(onValue.latitude, onValue.longitude);
           }
-  
+
           var height = 20.0 * (1 - (onValue.accuracy / 100));
           var width = 20.0 * (1 - (onValue.accuracy / 100));
           if (height < 0 || width < 0) {
@@ -115,7 +115,7 @@ class _MapsPluginLayerState extends State<MapsPluginLayer> {
                   ],
                 );
               });
-  
+
           widget.options.markers.add(_locationMarker);
 
           if (widget.options.updateMapLocationOnPositionChange &&
@@ -137,21 +137,21 @@ class _MapsPluginLayerState extends State<MapsPluginLayer> {
         widget.map.zoom ?? 15);
   }
 
-  void _handleLocationChanges() {
-    printLog(_stream.toString());
-    bool _locationStatusChanged;
-    if (_locationStatusChanged == null) {
-      _stream.receiveBroadcastStream().listen((onData) {
-        _locationStatusChanged = onData;
-        printLog("LOCATION ACCESS CHANGED: CURRENT-> ${onData ? 'On' : 'Off'}");
-        if (onData == false) {
-          var location = Location();
-          location.requestService();
-        }
-        if (onData == true) {
-          _subscribeToLocationChanges();
-        }
-      });
+  Future<void> _handleLocationChanges() async {
+    print(_stream.toString());
+    try {
+    _stream.receiveBroadcastStream().listen((onData) {
+      printLog("LOCATION ACCESS CHANGED: CURRENT-> ${onData ? 'On' : 'Off'}");
+      if (onData == false) {
+        var location = Location();
+        location.requestService();
+      }
+      if (onData == true) {
+        _subscribeToLocationChanges();
+      }
+    });
+    } catch (ex) {
+      print('Caught ' + ex.toString());
     }
   }
 
